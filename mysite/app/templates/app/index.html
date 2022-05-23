@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>React On Django</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root" data-users='{{ users|safe }}'></div>
+
+    <script type="text/babel">
+        const User = (props) => {
+            return (
+                <div>
+                    <h3>User{props.id}:</h3>
+                    <ul>
+                        <li>{props.username}</li>
+                        <li>{props.email}</li>
+                    </ul>
+                </div>
+            );
+        };
+
+        const App = (props) => {
+            return (
+                <div>
+                    {props.users.map((user) => (
+                        <User key={user.id} id={user.id} username={user.username} email={user.email} />
+                    ))}
+                </div>
+            );
+        };
+
+        const mount_point = document.getElementById('root')
+        const users = JSON.parse(mount_point.getAttribute('data-users'))
+        ReactDOM.render(<React.StrictMode>
+            <App users={users} />
+        </React.StrictMode>,
+            mount_point,
+        );
+    </script>
+</body>
+
+</html>
